@@ -11,7 +11,7 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "node ./node_modules/.bin/playwright test"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

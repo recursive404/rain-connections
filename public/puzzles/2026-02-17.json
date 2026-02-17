@@ -4,51 +4,50 @@
   "title": "First test puzzle",
   "date": "2026-02-17",
   "items": [
-    { "id": "i1", "text": "Edamame" },
-    { "id": "i2", "text": "Biscotti" },
-    { "id": "i3", "text": "Jerky" },
-    { "id": "i4", "text": "Pocky" },
+    { "id": "i1", "text": "Chips" },
+    { "id": "i2", "text": "Salsa" },
+    { "id": "i3", "text": "Cookie" },
+    { "id": "i4", "text": "Jerky" },
 
-    { "id": "i5", "text": "Closure" },
-    { "id": "i6", "text": "Recursion" },
-    { "id": "i7", "text": "Heap" },
-    { "id": "i8", "text": "Stack" },
+    { "id": "i5", "text": "Compile" },
+    { "id": "i6", "text": "Syntax" },
+    { "id": "i7", "text": "Lambda" },
+    { "id": "i8", "text": "Debug" },
 
     { "id": "i9", "text": "Aurora" },
     { "id": "i10", "text": "Eclipse" },
     { "id": "i11", "text": "Geyser" },
-    { "id": "i12", "text": "Tornado" },
+    { "id": "i12", "text": "Monsoon" },
 
-    { "id": "i13", "text": "No Fail" },
-    { "id": "i14", "text": "Ghost Notes" },
-    { "id": "i15", "text": "Faster Song" },
-    { "id": "i16", "text": "Disappearing Arrows" }
+    { "id": "i13", "text": "Tempo" },
+    { "id": "i14", "text": "Combo" },
+    { "id": "i15", "text": "Slice" },
+    { "id": "i16", "text": "Rhythm" }
   ],
   "groups": [
     {
       "id": "g-yellow",
-      "label": "Snack aisle",
+      "label": "Grab-and-go",
       "color": "yellow",
       "itemIds": ["i1", "i2", "i3", "i4"]
     },
     {
       "id": "g-green",
-      "label": "Code vocabulary",
+      "label": "Dev speak",
       "color": "green",
       "itemIds": ["i5", "i6", "i7", "i8"]
     },
     {
       "id": "g-blue",
-      "label": "Nature puts on a show",
+      "label": "Sky and earth",
       "color": "blue",
       "itemIds": ["i9", "i10", "i11", "i12"]
     },
     {
       "id": "g-purple",
-      "label": "VR rhythm toggles",
+      "label": "Rhythm game vibes",
       "color": "purple",
       "itemIds": ["i13", "i14", "i15", "i16"]
     }
   ]
 }
-

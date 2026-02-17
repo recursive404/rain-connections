@@ -33,6 +33,11 @@ jobs:
       - name: Test
         run: bun run test
 
+      - name: Install Playwright browsers
+        run: node ./node_modules/.bin/playwright install --with-deps chromium
+
+      - name: E2E (Playwright)
+        run: bun run test:e2e
+
       - name: Build
         run: bun run build
-

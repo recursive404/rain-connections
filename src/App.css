@@ -85,25 +85,6 @@
   align-items: center;
 }
 
-button.primary,
-button.secondary {
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-weight: 700;
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  cursor: pointer;
-}
-
-button.primary {
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-}
-
-button.secondary {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-}
-
 .group {
   border-radius: 12px;
   padding: 12px;
@@ -147,6 +128,51 @@ button.secondary {
   margin-top: 28px;
   padding-top: 16px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.history {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.history h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.05rem;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: hsl(var(--card));
+}
+
+.history-turn {
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.history-words {
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.history-badge {
+  font-weight: 900;
+  opacity: 0.8;
 }
 
 .field {

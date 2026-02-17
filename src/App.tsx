@@ -2,9 +2,10 @@ import './App.css'
 import { useEffect, useMemo, useReducer } from 'react'
 import { assertPuzzle, createInitialGameState, submitGuess, toggleSelectItem } from './game'
 import type { GameState, GroupColor, PuzzleGroup, PuzzleItem } from './game'
-import { GeneratorPanel } from './components/GeneratorPanel'
 import { Button } from './components/ui/button'
 import { cn } from './lib/utils'
+import { SettingsMenu } from './components/SettingsMenu'
+import { applyTheme, getStoredTheme } from './theme/theme'
 
 type LoadState =
   | { kind: 'loading' }
@@ -88,6 +89,11 @@ function App() {
   const defaultDateKey = useMemo(() => getPuzzleDateKeyFromUrl() ?? localDateKey(), [])
 
   useEffect(() => {
+    // Apply theme as early as possible on load.
+    applyTheme(getStoredTheme())
+  }, [])
+
+  useEffect(() => {
     let cancelled = false
 
     async function load() {
@@ -163,9 +169,12 @@ function App() {
             {puzzle.title}
           </div>
         </div>
-        <Button data-testid="reset-button" type="button" variant="outline" onClick={reset}>
-          Reset
-        </Button>
+        <div className="header-actions">
+          <Button data-testid="reset-button" type="button" variant="outline" onClick={reset}>
+            Reset
+          </Button>
+          <SettingsMenu />
+        </div>
       </header>
 
       <section className="status">
@@ -246,7 +255,6 @@ function App() {
         </section>
       ) : null}
 
-      <GeneratorPanel />
     </div>
   )
 }

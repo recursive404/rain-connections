@@ -2,6 +2,7 @@ import './App.css'
 import { useEffect, useMemo, useReducer } from 'react'
 import { assertPuzzle, createInitialGameState, submitGuess, toggleSelectItem } from './game'
 import type { GameState, GroupColor, PuzzleGroup, PuzzleItem } from './game'
+import { GeneratorPanel } from './components/GeneratorPanel'
 
 type LoadState =
   | { kind: 'loading' }
@@ -247,6 +248,8 @@ function App() {
           ))}
         </section>
       ) : null}
+
+      <GeneratorPanel />
     </div>
   )
 }

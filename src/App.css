@@ -138,3 +138,23 @@ button.secondary {
   margin-top: 20px;
 }
 
+.generator {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.field input,
+.field textarea {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  padding: 10px 12px;
+  font: inherit;
+}

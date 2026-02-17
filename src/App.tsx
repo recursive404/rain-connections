@@ -3,6 +3,8 @@ import { useEffect, useMemo, useReducer } from 'react'
 import { assertPuzzle, createInitialGameState, submitGuess, toggleSelectItem } from './game'
 import type { GameState, GroupColor, PuzzleGroup, PuzzleItem } from './game'
 import { GeneratorPanel } from './components/GeneratorPanel'
+import { Button } from './components/ui/button'
+import { cn } from './lib/utils'
 
 type LoadState =
   | { kind: 'loading' }
@@ -161,14 +163,9 @@ function App() {
             {puzzle.title}
           </div>
         </div>
-        <button
-          type="button"
-          data-testid="reset-button"
-          className="secondary"
-          onClick={reset}
-        >
+        <Button data-testid="reset-button" type="button" variant="outline" onClick={reset}>
           Reset
-        </button>
+        </Button>
       </header>
 
       <section className="status">
@@ -204,31 +201,31 @@ function App() {
           const item = itemById(puzzle.items, id)
           const selected = game.selectedItemIds.includes(id)
           return (
-            <button
+            <Button
               key={id}
               type="button"
-              className={selected ? 'tile tile-selected' : 'tile'}
+              variant="outline"
+              className={cn('tile', selected && 'tile-selected')}
               data-testid={`tile-${id}`}
               data-state={selected ? 'selected' : 'idle'}
               onClick={() => dispatch({ type: 'toggle', itemId: id })}
               disabled={game.status !== 'playing'}
             >
               {item.text}
-            </button>
+            </Button>
           )
         })}
       </section>
 
       <section className="controls">
-        <button
-          type="button"
-          className="primary"
+        <Button
           data-testid="submit-guess-button"
+          type="button"
           onClick={() => dispatch({ type: 'submit' })}
           disabled={game.status !== 'playing'}
         >
           Submit
-        </button>
+        </Button>
       </section>
 
       {game.status !== 'playing' ? (

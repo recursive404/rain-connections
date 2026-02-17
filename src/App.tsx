@@ -1,6 +1,6 @@
 import './App.css'
-import { useEffect, useMemo, useReducer } from 'react'
-import { assertPuzzle, createInitialGameState, submitGuess, toggleSelectItem } from './game'
+import { useEffect, useMemo, useReducer, useRef } from 'react'
+import { assertPuzzle, createInitialGameState, shuffleRemainingTiles, submitGuess, toggleSelectItem } from './game'
 import type { GameState, GroupColor, PuzzleGroup, PuzzleItem } from './game'
 import { Button } from './components/ui/button'
 import { cn } from './lib/utils'
@@ -10,31 +10,39 @@ import { applyTheme, getStoredTheme } from './theme/theme'
 type LoadState =
   | { kind: 'loading' }
   | { kind: 'error'; message: string }
-  | { kind: 'ready'; game: GameState }
+  | { kind: 'ready'; game: GameState; isChecking: boolean }
 
 type Action =
   | { type: 'load_ok'; game: GameState }
   | { type: 'load_err'; message: string }
   | { type: 'toggle'; itemId: string }
-  | { type: 'submit' }
+  | { type: 'shuffle' }
+  | { type: 'submit_start' }
+  | { type: 'submit_finish' }
   | { type: 'reset'; game: GameState }
 
 function reducer(state: LoadState, action: Action): LoadState {
   if (state.kind !== 'ready') {
-    if (action.type === 'load_ok') return { kind: 'ready', game: action.game }
+    if (action.type === 'load_ok') return { kind: 'ready', game: action.game, isChecking: false }
     if (action.type === 'load_err') return { kind: 'error', message: action.message }
     return state
   }
 
   switch (action.type) {
     case 'toggle':
-      return { kind: 'ready', game: toggleSelectItem(state.game, action.itemId) }
-    case 'submit':
-      return { kind: 'ready', game: submitGuess(state.game) }
+      if (state.isChecking) return state
+      return { kind: 'ready', game: toggleSelectItem(state.game, action.itemId), isChecking: false }
+    case 'shuffle':
+      if (state.isChecking) return state
+      return { kind: 'ready', game: shuffleRemainingTiles(state.game), isChecking: false }
+    case 'submit_start':
+      return { ...state, isChecking: true }
+    case 'submit_finish':
+      return { kind: 'ready', game: submitGuess(state.game), isChecking: false }
     case 'reset':
-      return { kind: 'ready', game: action.game }
+      return { kind: 'ready', game: action.game, isChecking: false }
     case 'load_ok':
-      return { kind: 'ready', game: action.game }
+      return { kind: 'ready', game: action.game, isChecking: false }
     case 'load_err':
       return { kind: 'error', message: action.message }
     default:
@@ -85,6 +93,7 @@ function groupById(groups: PuzzleGroup[], id: string): PuzzleGroup {
 
 function App() {
   const [state, dispatch] = useReducer(reducer, { kind: 'loading' } satisfies LoadState)
+  const submitTimeoutRef = useRef<number | null>(null)
 
   const defaultDateKey = useMemo(() => getPuzzleDateKeyFromUrl() ?? localDateKey(), [])
 
@@ -127,6 +136,7 @@ function App() {
     void load()
     return () => {
       cancelled = true
+      if (submitTimeoutRef.current !== null) window.clearTimeout(submitTimeoutRef.current)
     }
   }, [defaultDateKey])
 
@@ -151,6 +161,7 @@ function App() {
   const game = state.game
   const puzzle = game.puzzle
   const mistakesLeft = Math.max(0, game.mistakesAllowed - game.mistakesMade)
+  const isChecking = state.isChecking
 
   const foundGroups = game.foundGroupIds.map((gid) => groupById(puzzle.groups, gid))
   const foundItemIds = new Set(foundGroups.flatMap((g) => g.itemIds))
@@ -158,6 +169,16 @@ function App() {
 
   function reset() {
     dispatch({ type: 'reset', game: createInitialGameState({ puzzle }) })
+  }
+
+  function onSubmit() {
+    if (game.status !== 'playing') return
+    if (isChecking) return
+    dispatch({ type: 'submit_start' })
+    submitTimeoutRef.current = window.setTimeout(() => {
+      dispatch({ type: 'submit_finish' })
+      submitTimeoutRef.current = null
+    }, 650)
   }
 
   return (
@@ -184,7 +205,11 @@ function App() {
         </div>
       </section>
 
-      {game.lastMessage ? (
+      {isChecking ? (
+        <div data-testid="checking" className="feedback" data-state="checking">
+          Checking…
+        </div>
+      ) : game.lastMessage ? (
         <div data-testid="feedback" className="feedback" data-state={game.lastFoundGroupId ? 'ok' : 'info'}>
           {game.lastMessage}
         </div>
@@ -218,7 +243,7 @@ function App() {
               data-testid={`tile-${id}`}
               data-state={selected ? 'selected' : 'idle'}
               onClick={() => dispatch({ type: 'toggle', itemId: id })}
-              disabled={game.status !== 'playing'}
+              disabled={game.status !== 'playing' || isChecking}
             >
               {item.text}
             </Button>
@@ -228,13 +253,46 @@ function App() {
 
       <section className="controls">
         <Button
+          data-testid="shuffle-button"
+          type="button"
+          variant="outline"
+          onClick={() => dispatch({ type: 'shuffle' })}
+          disabled={game.status !== 'playing' || isChecking}
+        >
+          Shuffle
+        </Button>
+        <Button
           data-testid="submit-guess-button"
           type="button"
-          onClick={() => dispatch({ type: 'submit' })}
-          disabled={game.status !== 'playing'}
+          onClick={onSubmit}
+          disabled={game.status !== 'playing' || isChecking}
         >
           Submit
         </Button>
+      </section>
+
+      <section className="history" data-testid="guess-history">
+        <h2>Guess history</h2>
+        {game.guessHistory.length === 0 ? (
+          <div className="subhead">No guesses yet.</div>
+        ) : (
+          <ol className="history-list">
+            {game.guessHistory.map((g) => {
+              const words = g.itemIds.map((id) => itemById(puzzle.items, id).text).join(' • ')
+              const badge =
+                g.outcome === 'correct' ? '✓' : g.outcome === 'one_away' ? 'One away' : '—'
+              return (
+                <li key={g.turn} className="history-item" data-testid={`guess-${g.turn}`}>
+                  <span className="history-turn">#{g.turn}</span>
+                  <span className="history-words">{words}</span>
+                  <span className="history-badge" data-state={g.outcome}>
+                    {badge}
+                  </span>
+                </li>
+              )
+            })}
+          </ol>
+        )}
       </section>
 
       {game.status !== 'playing' ? (

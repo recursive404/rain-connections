@@ -49,6 +49,11 @@ export interface GameState {
   mistakesMade: number
   mistakesAllowed: number
   status: GameStatus
+  shuffleCount: number
+  /**
+   * Guess history is a deterministic list of past guesses (no timestamps).
+   */
+  guessHistory: GuessRecord[]
   /**
    * Short-lived feedback for the last action (e.g., correct/wrong).
    */
@@ -59,3 +64,11 @@ export interface GameState {
   lastFoundGroupId?: string
 }
 
+export type GuessOutcome = 'correct' | 'one_away' | 'wrong'
+
+export interface GuessRecord {
+  turn: number
+  itemIds: [string, string, string, string]
+  outcome: GuessOutcome
+  groupId?: string
+}

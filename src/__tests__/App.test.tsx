@@ -69,7 +69,7 @@ describe('App', () => {
     await user.click(screen.getByTestId('tile-i4'))
     await user.click(screen.getByTestId('submit-guess-button'))
 
+    // Submit has a brief “checking” delay.
     expect(await screen.findByTestId('found-group-g-yellow')).toBeInTheDocument()
   })
 })
-

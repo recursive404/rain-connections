@@ -1,4 +1,7 @@
 import { useMemo, useState } from 'react'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Textarea } from './ui/textarea'
 
 function localDateKey(): string {
   const d = new Date()
@@ -40,7 +43,7 @@ export function GeneratorPanel() {
 
       <label className="field">
         <span>Date key (YYYY-MM-DD)</span>
-        <input
+        <Input
           data-testid="generator-date-input"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -51,7 +54,7 @@ export function GeneratorPanel() {
 
       <label className="field">
         <span>Prompt</span>
-        <textarea
+        <Textarea
           data-testid="generator-prompt-input"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -60,15 +63,15 @@ export function GeneratorPanel() {
         />
       </label>
 
-      <button
-        type="button"
-        className="secondary"
+      <Button
         data-testid="generator-copy-button"
+        type="button"
+        variant="outline"
         onClick={copyRequest}
         disabled={prompt.trim().length === 0}
       >
         Copy request JSON
-      </button>
+      </Button>
 
       {status ? (
         <div className="feedback" data-testid="generator-status">
@@ -78,4 +81,3 @@ export function GeneratorPanel() {
     </section>
   )
 }
-

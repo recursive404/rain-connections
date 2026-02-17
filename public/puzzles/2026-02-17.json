@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "id": "puzzle-2026-02-17",
+  "title": "First test puzzle",
+  "date": "2026-02-17",
+  "items": [
+    { "id": "i1", "text": "Edamame" },
+    { "id": "i2", "text": "Biscotti" },
+    { "id": "i3", "text": "Jerky" },
+    { "id": "i4", "text": "Pocky" },
+
+    { "id": "i5", "text": "Closure" },
+    { "id": "i6", "text": "Recursion" },
+    { "id": "i7", "text": "Heap" },
+    { "id": "i8", "text": "Stack" },
+
+    { "id": "i9", "text": "Aurora" },
+    { "id": "i10", "text": "Eclipse" },
+    { "id": "i11", "text": "Geyser" },
+    { "id": "i12", "text": "Tornado" },
+
+    { "id": "i13", "text": "No Fail" },
+    { "id": "i14", "text": "Ghost Notes" },
+    { "id": "i15", "text": "Faster Song" },
+    { "id": "i16", "text": "Disappearing Arrows" }
+  ],
+  "groups": [
+    {
+      "id": "g-yellow",
+      "label": "Snack aisle",
+      "color": "yellow",
+      "itemIds": ["i1", "i2", "i3", "i4"]
+    },
+    {
+      "id": "g-green",
+      "label": "Code vocabulary",
+      "color": "green",
+      "itemIds": ["i5", "i6", "i7", "i8"]
+    },
+    {
+      "id": "g-blue",
+      "label": "Nature puts on a show",
+      "color": "blue",
+      "itemIds": ["i9", "i10", "i11", "i12"]
+    },
+    {
+      "id": "g-purple",
+      "label": "VR rhythm toggles",
+      "color": "purple",
+      "itemIds": ["i13", "i14", "i15", "i16"]
+    }
+  ]
+}
+
